@@ -1,4 +1,4 @@
-class CacheLRU(object):
+class CacheLRU(dict):
     """
         size - cache size
         cache - dict where
@@ -6,7 +6,7 @@ class CacheLRU(object):
             - value is our value
     """
     def __init__(self, size):
-        if size < 1:
+        if size <= 1:
             raise Exception()
         self.size = size
         self.cache = {}
@@ -15,10 +15,14 @@ class CacheLRU(object):
         if len(self.cache) + 1 > self.size:
             del self.cache[min(self.cache.keys())]
 
-        lru_indexes = self.cache.keys()
-        index = 1 if not lru_indexes else max(lru_indexes) + 1
+        index = self.recently_used_index()
 
         self.cache[index] = item
+
+    def recently_used_index(self):
+        lru_indexes = self.cache.keys()
+        index = 1 if not lru_indexes else max(lru_indexes) + 1
+        return index
 
     def _find_lru_index_of(self, item):
         for index_value, item_value in self.cache.items():
@@ -36,7 +40,9 @@ class CacheLRU(object):
         item_index = self._find_lru_index_of(item)
         if item_index:
             del self.cache[item_index]
-            self.cache[max(self.cache.keys()) + 1] = item
+            index = self.recently_used_index()
+            self.cache[index] = item
+            return item
 
     def pop(self):
         raise NotImplementedError()

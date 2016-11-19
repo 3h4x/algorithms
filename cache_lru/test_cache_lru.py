@@ -9,7 +9,7 @@ class TestCacheLRU(unittest.TestCase):
         self.cache_lru = CacheLRU(5)
 
     def test_small_cache_size(self):
-        self.assertRaises(Exception, CacheLRU, 0)
+        self.assertRaises(Exception, CacheLRU, 1)
 
     def test_get_on_empty_cache(self):
         cache_lru = CacheLRU(5)
@@ -45,6 +45,14 @@ class TestCacheLRU(unittest.TestCase):
         result = cache_lru.get()
 
         self.assertEqual(result, [2, 3])
+
+    def test_get_element(self):
+        cache_lru = CacheLRU(2)
+
+        cache_lru.add(1)
+        result = cache_lru.get(1)
+
+        self.assertEqual(result, 1)
 
     def test_get_element_update_cache(self):
         cache_lru = CacheLRU(2)
