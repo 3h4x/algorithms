@@ -15,11 +15,11 @@ class CacheLRU(dict):
         if len(self.cache) + 1 > self.size:
             del self.cache[min(self.cache.keys())]
 
-        index = self.recently_used_index()
+        index = self._recently_used_index()
 
         self.cache[index] = item
 
-    def recently_used_index(self):
+    def _recently_used_index(self):
         lru_indexes = self.cache.keys()
         index = 1 if not lru_indexes else max(lru_indexes) + 1
         return index
@@ -40,7 +40,7 @@ class CacheLRU(dict):
         item_index = self._find_lru_index_of(item)
         if item_index:
             del self.cache[item_index]
-            index = self.recently_used_index()
+            index = self._recently_used_index()
             self.cache[index] = item
             return item
 
