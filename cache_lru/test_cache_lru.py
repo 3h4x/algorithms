@@ -5,9 +5,6 @@ from cache_lru.cache_lru import CacheLRU
 
 class TestCacheLRU(unittest.TestCase):
 
-    def setUp(self):
-        self.cache_lru = CacheLRU(5)
-
     def test_small_cache_size(self):
         self.assertRaises(Exception, CacheLRU, 1)
 
